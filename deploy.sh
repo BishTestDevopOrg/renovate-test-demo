@@ -17,7 +17,7 @@ kubectl apply -f k8s/configmap.yaml
 # Create secret from environment variable
 kubectl create secret generic renovate-secret \
   --from-literal=RENOVATE_TOKEN="${RENOVATE_TOKEN}" \
-  --from-literal=RENOVATE_REPOSITORIES="BishTestDevopOrg/renovate-node-demo" \
+  --from-literal=RENOVATE_REPOSITORIES="BishTestDevopOrg/renovate-test-demo" \
   --from-literal=LOG_LEVEL="info" \
   --from-literal=GITHUB_USERNAME="20was" \
   -n renovate \
