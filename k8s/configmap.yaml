@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: renovate-config
+  namespace: renovate
+  labels:
+    app: renovate
+data:
+  config.json: |
+    {
+      "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+      "extends": [
+        "config:base"
+      ],
+      "timezone": "Australia/Sydney",
+      "schedule": ["every weekday"],
+      "packageRules": [
+        {
+          "matchUpdateTypes": ["minor", "patch"],
+          "automerge": false
+        }
+      ],
+      "prTitle": "chore(deps): {{depName}} {{#if isPinDigest}}{{{displayFrom}}} → {{{displayTo}}}{{else}}{{#if isMajor}}{{prettyNewMajor}}{{else}}{{#if isSingleVersion}}{{prettyNewVersion}}{{else}}{{#if newValue}}{{{newValue}}}{{else}}{{{newDigest}}}{{/if}}{{/if}}{{/if}}{{/if}}",
+      "commitMessagePrefix": "chore(deps): ",
+      "rebaseWhen": "conflicted",
+      "platform": "github",
+      "autodiscover": false
+    }

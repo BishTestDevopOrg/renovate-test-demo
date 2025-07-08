@@ -1,0 +1,45 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: renovate
+  namespace: renovate
+  labels:
+    app: renovate
+spec:
+  # Run every weekday at 9 AM
+  schedule: "0 9 * * 1-5"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: renovate
+        spec:
+          restartPolicy: Never
+          containers:
+          - name: renovate
+            image: renovate/renovate:41.21.0
+            envFrom:
+            - secretRef:
+                name: renovate-secret
+            env:
+            - name: RENOVATE_CONFIG_FILE
+              value: "/config/config.json"
+            volumeMounts:
+            - name: config-volume
+              mountPath: /config
+              readOnly: true
+            resources:
+              requests:
+                memory: "512Mi"
+                cpu: "250m"
+              limits:
+                memory: "1Gi"
+                cpu: "500m"
+          volumes:
+          - name: config-volume
+            configMap:
+              name: renovate-config
